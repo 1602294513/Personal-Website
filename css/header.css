@@ -1,0 +1,50 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+header {
+    height: 80px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 1px 0px 8px #555;
+    border-radius: 0px 0px 8px 8px;
+    color: #fff;
+    text-align: center;
+    transition: all 0.4s;
+    position: fixed; /* 固定在页面顶部 */
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: flex-end;
+}
+.logo {
+    transition: all 0.4s;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    margin-left: 20px;
+    width: 50px;
+}
+.menu {
+    font-size: 24px;
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+}
+.menu a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 20px;
+}
+.main{
+    height: 1000px;
+}
+header.shrink {
+    height: 60px; /* 收缩后的高度 */
+}
+.logo.shrink {
+    width: 40px; /* 收缩后的Logo宽度 */
+}
+.menu.shrink {
+    font-size: 20px; /* 收缩后的菜单字体大小 */
+}

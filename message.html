@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>留言板</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .messages {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+        .message {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>留言板</h1>
+        <form id="messageForm">
+            <textarea id="messageInput" placeholder="请输入你的留言..."></textarea>
+            <button type="submit">提交留言</button>
+        </form>
+        <div class="messages" id="messagesContainer"></div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById('messageForm');
+            const messageInput = document.getElementById('messageInput');
+            const messagesContainer = document.getElementById('messagesContainer');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // 阻止表单提交的默认行为
+
+                const messageText = messageInput.value.trim();
+                if (messageText === '') {
+                    alert('留言不能为空');
+                    return;
+                }
+
+                // 创建一个新的留言元素
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+                messageElement.textContent = messageText;
+
+                // 将新的留言元素添加到留言容器中
+                messagesContainer.appendChild(messageElement);
+
+                // 清空文本框
+                messageInput.value = '';
+            });
+        });
+    </script>
+</body>
+</html>
