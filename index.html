@@ -4,24 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello!</title>
-    <link rel="stylesheet" href="./css/header.css">
+    <script src="https://kit.fontawesome.com/33fddd6bbc.js" crossorigin="anonymous"></script>
+    <link rel="icon" href="./img/index/icon/icon.ico">
+    <link rel="stylesheet" href="./css/checkbox.css">
     <link rel="stylesheet" href="./css/index.css">
     <script src="./js/index.js"></script>
 </head>
 <body>
     <header>
-        <img class="logo" src="./img/header/logo.png" alt="Logo">
-        
-        <div class="menu">
-            <a href="login.html">登录</a>
-            <a href="login.html">注册</a>
-            <a href="message.html">留言</a>
-            <!-- 根据实际添加更多功能链接 -->
-        </div>
-        <div class="theme-switch">
-            <label for="theme-toggle">主题:</label>
-            <input type="checkbox" id="theme-toggle">
-        </div>
+        <input type="checkbox" id="theme-toggle">
+        <label for="theme-toggle" class="toggle-label">
+            <span class="toggle-slider"></span>
+        </label>
     </header>
     <main class="grid-container">
         <!-- <section class="messages">//留言板
@@ -32,40 +26,56 @@
             </form>
             <div id="message-board"></div>
         </section> -->
-        <section class="link">
-            <h1>Personal link</h1>
-            <div>
-                <a href="https://space.bilibili.com/33230715">哔哩哔哩</a>
-            </div>
+        <section class="welcome">
+            <div class="Hello">同学们好</div>
+            
         </section>
         <section class="profile">
             <h1>个人资料<br>Personal Profile</h1>
             <img src="./img/index/icon/logo.png" alt="Profile Picture" class="profile-pic">
-            <p>Hi, I'm [Your Name], a [Your Profession] based in [Your Location]. I specialize in [Your Specializations].</p>
+            <p>出生：四川</p>
+            <p>故居：西安</p>
+            <p></p>
         </section>
         <section class="time">
-            <h1>时间<br>Time</h1>
+            <!-- <h1>时间<br>Time</h1> -->
             <div id="current-time"></div>
         </section>
         <section class="projects">
-            <h2>Projects</h2>
+            <h1>小项目<br>Mini Projects</h1>
             <div class="project-list">
-                <div class="project-item">
-                    <h3>Project 1</h3>
-                    <p>Description of Project 1.</p>
-                </div>
-                <div class="project-item">
-                    <h3>Project 2</h3>
-                    <p>Description of Project 2.</p>
-                </div>
-                <!-- Add more projects as needed -->
+                <a href="./projects/ABC.html" target="_blank">联想词</a>
+                <a href="./projects/clickHere.html" target="_blank">小游戏1</a>
+                <a href="./projects/clickHere2.html" target="_blank">小游戏2</a>
+                <a href="./projects/colorful.html" target="_blank">随机颜色</a>
+                <a href="./projects/cps.html" target="_blank">CPS测试</a>
+                <a href="./projects/rotation.html" target="_blank">旋转图形</a>
+                <a href="./projects/typing.html" target="_blank">打字</a>
             </div>
+        </section>
+        <section class="links">
+            <a href="https://space.bilibili.com/33230715" class="bilibili" target="_blank">
+                <i class="fa-brands fa-bilibili"></i>
+            </a>
+            <a href="https://music.163.com/#/user/home?id=482756030" class="netease" target="_blank">
+                <i class="fa-solid fa-music"></i>
+            </a>
+            <a href="tencent://Message/?Uin=1602294513&Site=&Menu=yes" class="qq" target="_blank">
+                <i class="fa-brands fa-qq"></i>
+            </a>
+            <a href="mailto:1602294513@qq.com" class="mail" target="_blank">
+                <i class="fa-solid fa-envelope"></i>
+            </a>
+            <a href="https://github.com/1602294513" class="github" target="_blank">
+                <i class="fa-brands fa-github"></i>
+            </a>
+            <a href="message.html" class="message">给我留言</a>
         </section>
     </main>
 
     <footer class="footer">
-        <p>&copy; 2024 [Your Name]. All rights reserved.</p>
+        <p>&copy; 2024 Jack. All rights reserved.</p>
+        <a class="banquan" href="http://beian.miit.gov.cn/" target="_blank">蜀ICP备2022028857号</a>
     </footer>
-
 </body>
 </html>

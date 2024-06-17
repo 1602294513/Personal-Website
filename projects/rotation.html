@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+	</head>
+	
+	<style>
+		body {margin: 0px;width: 1000px;}
+		div{width: 100px;height: 100px;}
+		@keyframes revolve {
+			to{transform: rotate(360deg);}
+		}
+		button{
+			margin: 0px auto;
+		}
+		#b{
+			display: none;
+		}
+		.box{
+			margin: 100px;
+			position:absolute;
+			animation: revolve 4s linear 100ms 1 normal ;
+		}
+		.play{
+			animation: revolve 4s linear 100ms 1 normal ;
+		}
+		.restart{
+			animation: revolve 4s linear 100ms 1 normal ;
+		}
+	</style>
+	<body>
+		<input id="second" type="range" value="4" max="100" min="1" onchange="sec()"/>
+		<span id="showSec">4</span>
+		<input id="boxNum" type="range" value="20" max=200" min="1" onchange="num()"/>
+		<span id="showNum">20</span>
+		<br />
+		<button id="start" onclick="startBtn();this.hidden">生成</button>
+		<button id="btn" onclick="btn()">停止/循环</button>
+		<button id="btn" onclick="location.reload()">刷新</button>
+		<table class="box" id="b" border="1" >
+			<tr>
+				<td rowspan="2">	<div></div>	</td> <td colspan="2">	<div></div>	</td>
+			</tr>
+			<tr>
+				<td>	<div></div>	</td> <td rowspan="2">	<div></div>	</td>
+			</tr>
+			<tr >
+				<td colspan="2">	<div></div>	</td>
+			</tr>
+		</table>
+		
+		<script>
+			var table = document.getElementById("b");// 获取table元素
+			var count = 0;
+			var only = true;
+			var second = document.getElementById("second").value;
+			var boxNum = document.getElementById("boxNum").value;
+			function sec(){
+				second = document.getElementById("second").value;
+				document.getElementById('showSec').innerHTML=second;
+				
+			}
+			function num(){
+				boxNum = document.getElementById("boxNum").value;
+				document.getElementById('showNum').innerHTML=boxNum;
+			}
+			function startBtn(){
+				if(only){
+					start();
+					only=false;
+				}
+			}
+			function start(){
+				console.log(second,boxNum)
+				for(var i=1; i<=boxNum; i++){
+						var copy = table.cloneNode(true);//复制table元素里面所有内容
+						copy.setAttribute("id","b"+i);//设置table元素id的值
+						table.parentElement.appendChild(copy);//添加复制的table元素
+						document.getElementById("b"+i).style.animationDelay=i*100+"ms";
+						document.getElementById("b"+i).style.animationDuration=second+"s";
+						document.getElementById("b"+i).style.animationPlayState = "paused";
+				}
+			}
+			function btn(){
+				count++;
+				if(count%2==0){
+					stop();
+				}else{
+					loop();
+				}
+			}
+			function stop() {
+			  var elements = document.getElementsByClassName("box");
+			  for (var i = 0; i < elements.length; i++) {
+			    elements[i].style.animationPlayState = "paused";
+			  }
+			}
+			function loop() {
+			  var elements = document.getElementsByClassName("box");
+			  for (var i = 0; i < elements.length; i++) {
+			    elements[i].style.animationPlayState = "running";
+			  }
+			}
+		</script>
+	</body>
+</html>

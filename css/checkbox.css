@@ -1,0 +1,49 @@
+
+#theme-toggle {
+    display: none;
+}
+.toggle-label {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    display: inline-block;
+    width: 60px;
+    height: 32px; 
+}
+.toggle-label .toggle-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    border-radius: 32px; /* 使圆角与高度匹配 */
+    cursor: pointer;
+    transition: background-color 0.4s;
+}
+.toggle-label .toggle-slider:before {
+    content: "";
+    position: absolute;
+    height: 24px; 
+    width: 24px; /* 确保滑块的宽高相等 */
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.4s;
+}
+
+/* 切换开关选中状态样式 */
+#theme-toggle:checked + .toggle-label .toggle-slider {
+    background-color: #000; /* 黑色主题时的滑块背景色 */
+}
+
+#theme-toggle:checked + .toggle-label .toggle-slider:before {
+    transform: translateX(28px); /* 调整为滑块新宽度 */
+    background-color: white; /* 滑块圆点颜色 */
+}
+
+/* 滑块未选中状态样式 */
+.toggle-label .toggle-slider:before {
+    background-color: black; /* 滑块圆点默认颜色 */
+}

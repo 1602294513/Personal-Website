@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box{
+            width: 200px;
+            height: 200px;
+            margin: 200px auto ;
+        }
+        .around{
+            position: relative;
+            z-index: 5;
+            float: left;
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            border-radius: 100%;
+        }
+        #display{
+            position: relative;
+            z-index: 4;
+            display: block;
+            height: 50px;
+            width: 200px;
+            background-color: white;
+        }
+        #display-2{
+            position: relative;
+            z-index: 5;
+            height: 50px;
+            width: 200px;
+            background-color: red;
+        }
+        .bottom{
+            position: relative;
+            z-index: 3;
+            width: 100px;
+            height: 100px;
+            background-color: red;
+        }
+        #b-1{
+            top: -50px;
+            transform: skew(0,45deg);
+        }
+        #b-2{
+            top: -150px;
+            left: 100px;
+            transform: skew(0,-45deg);
+        }
+        @keyframes box{
+            from{
+                transform:scale(0);
+            }
+            to{
+                transform:scale(2);
+            }
+        }
+        @keyframes color{
+            from{
+               background-color: red;
+            }
+            to{
+                background-color: white;
+            }
+        }
+        .box{
+            animation-name: box;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+        }
+        .box div{
+            animation-name: color;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+            animation-direction: alternate-reverse;
+        }
+    </style>
+</head>
+<body style="margin: 0px;">
+    <div class="box">
+        <div class="around" id="left"></div><div class="around" id="right"></div>
+        <span id="display"></span><div id="display-2"></div>
+        <div class="bottom" id="b-1"></div><div class="bottom" id="b-2"></div>
+    </div>
+</body>
+</html>
