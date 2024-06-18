@@ -1,8 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function(){
+    //主题切换
     const themeToggle = document.getElementById('theme-toggle');
     const root = document.documentElement;
-
-    themeToggle.addEventListener('change', () => {
+    //切换事件
+    themeToggle.onclick = function (){
         if (themeToggle.checked) {
             root.classList.remove('light');
             root.classList.add('dark');
@@ -10,44 +11,72 @@ document.addEventListener('DOMContentLoaded', () => {
             root.classList.remove('dark');
             root.classList.add('light');
         }
-    });
-
-    // Set initial theme
+    }
+    //默认主题
     root.classList.add('light');
 
-    // Display current time
-    const timeElement = document.getElementById('current-time');
-    const updateTime = () => {
+    //显示当前日期 星期 时间
+    function updateTime() {
+        //获取元素
+        const currentDateElement = document.getElementById('current-date');
+        const currentTimeElement = document.getElementById('current-time');
         const now = new Date();
-        timeElement.textContent = now.toLocaleTimeString();
-    };
+        //获取格式
+        const dateOptions = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        };
+        const weekOptions = {
+            weekday: 'long'
+        };
+        const timeOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        };
+        //改为字符串
+        const dateString = now.toLocaleDateString('zh-CN', dateOptions);
+        const weekString = now.toLocaleDateString('zh-CN', weekOptions);
+        const timeString = now.toLocaleTimeString('zh-CN', timeOptions);
+        //在网页上显示元素
+        currentDateElement.innerHTML = dateString +'<br/>'+weekString;
+        currentTimeElement.textContent = timeString;
+    }
+    //初始立即调用时间
     updateTime();
+    //每秒更新
     setInterval(updateTime, 1000);
+    //一言
+    function fetchHitokoto() {
+        fetch('https://v1.hitokoto.cn?max_length=24')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('hitokoto_text').innerHTML = data.hitokoto;
+                document.getElementById('from_text').innerHTML = data.from;
+            })
+            .catch(console.error);
+    }
 
-    // Message board functionality
-    const messageForm = document.getElementById('message-form');
-    const messageBoard = document.getElementById('message-board');
+    fetchHitokoto(); // Initial fetch when the page loads
 
-    messageForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const messageContent = document.getElementById('message-content').value;
-        if (messageContent) {
-            const messageElement = document.createElement('p');
-            messageElement.textContent = messageContent;
-            messageBoard.appendChild(messageElement);
-            document.getElementById('message-content').value = '';
+    let times = 0;
+    document.getElementById('hitokoto').addEventListener('click', function() {
+        if (times === 0) {
+            times = 1;
+            let index = setInterval(function() {
+                times--;
+                if (times === 0) {
+                    clearInterval(index);
+                }
+            }, 1000);
+            fetchHitokoto();
+        } else {
+            iziToast.show({
+                timeout: 1000,
+                icon: "fa-solid fa-circle-exclamation",
+                message: '你点太快了吧'
+            });
         }
     });
-});
-window.addEventListener('scroll', function() {
-    var header = document.querySelector('header');
-    var logo = document.querySelector('.logo');
-
-    if (window.scrollY > 10) {
-        header.classList.add('shrink');
-        logo.classList.add('shrink');
-    } else {
-        header.classList.remove('shrink');
-        logo.classList.remove('shrink');
-    }
 });

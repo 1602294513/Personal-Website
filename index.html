@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +9,31 @@
     <link rel="icon" href="./img/index/icon/icon.ico">
     <link rel="stylesheet" href="./css/checkbox.css">
     <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/load.css">
     <script src="./js/index.js"></script>
+    <script src="./js/load.js"></script>
 </head>
+
 <body>
+    <!--加载动画 start-->
+    <div id="loading-box">
+        <div class="loading-left-bg"></div>
+        <div class="loading-right-bg"></div>
+        <div class="spinner-box">
+            <div class="loader">
+                <div class="inner one"></div>
+                <div class="inner two"></div>
+                <div class="inner three"></div>
+            </div>
+            <div class="loading-word">
+                <p class="loading-title" id="loading-title">Jackの主页</p>
+                <span id="loading-text">Loading...</span>
+            </div>
+        </div>
+    </div>
+    
+    <!--加载动画 end-->
+    <!-- 切换主题 -->
     <header>
         <input type="checkbox" id="theme-toggle">
         <label for="theme-toggle" class="toggle-label">
@@ -26,19 +49,20 @@
             </form>
             <div id="message-board"></div>
         </section> -->
-        <section class="welcome">
-            <div class="Hello">同学们好</div>
-            
+        <section class="welcome" id="hitokoto">
+            <div class="Hello" id="hitokoto_text">同学们好</div>
+            <!-- <a href="#" id="hitokoto_text" >:D 获取中...</a> -->
         </section>
         <section class="profile">
             <h1>个人资料<br>Personal Profile</h1>
             <img src="./img/index/icon/logo.png" alt="Profile Picture" class="profile-pic">
+            <p>AckerLi</p>
             <p>出生：四川</p>
             <p>故居：西安</p>
-            <p></p>
         </section>
         <section class="time">
             <!-- <h1>时间<br>Time</h1> -->
+            <h3 id="current-date"></h3>
             <div id="current-time"></div>
         </section>
         <section class="projects">
@@ -77,5 +101,17 @@
         <p>&copy; 2024 Jack. All rights reserved.</p>
         <a class="banquan" href="http://beian.miit.gov.cn/" target="_blank">蜀ICP备2022028857号</a>
     </footer>
+    <script>
+        fetch('https://v1.hitokoto.cn')
+            .then(response => response.json())
+            .then(data => {
+                const hitokoto = document.querySelector('#hitokoto_text')
+                hitokoto.href = `https://hitokoto.cn/?uuid=${data.uuid}`
+                hitokoto.innerText = data.hitokoto
+            })
+            .catch(console.error)
+    </script>
+    
 </body>
+
 </html>
