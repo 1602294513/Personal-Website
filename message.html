@@ -6,30 +6,53 @@
     <title>留言板</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
             margin: 20px;
         }
         .container {
             max-width: 600px;
             margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h1 {
             text-align: center;
+            color: #333;
         }
         form {
             margin-bottom: 20px;
         }
-        textarea {
+        input, textarea {
             width: 100%;
-            height: 100px;
             margin-bottom: 10px;
             padding: 10px;
             font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease;
+        }
+        input:focus, textarea:focus {
+            border-color: #007bff;
+        }
+        textarea {
+            height: 100px;
         }
         button {
             padding: 10px 20px;
             font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
         }
         .messages {
             margin-top: 20px;
@@ -37,9 +60,38 @@
             padding-top: 20px;
         }
         .message {
+            position: relative;
             margin-bottom: 20px;
-            padding: 10px;
+            padding: 15px;
             border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            word-wrap: break-word;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .message.show {
+            opacity: 1;
+        }
+        .message-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .delete-btn:hover {
+            background-color: #c0392b;
         }
     </style>
 </head>
@@ -47,7 +99,8 @@
     <div class="container">
         <h1>留言板</h1>
         <form id="messageForm">
-            <textarea id="messageInput" placeholder="请输入你的留言..."></textarea>
+            <input type="text" id="usernameInput" placeholder="请输入你的昵称..." required>
+            <textarea id="messageInput" placeholder="请输入你的留言..." required></textarea>
             <button type="submit">提交留言</button>
         </form>
         <div class="messages" id="messagesContainer"></div>
@@ -55,28 +108,41 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const form = document.getElementById('messageForm');
+            const usernameInput = document.getElementById('usernameInput');
             const messageInput = document.getElementById('messageInput');
             const messagesContainer = document.getElementById('messagesContainer');
 
             form.addEventListener('submit', function(event) {
                 event.preventDefault(); // 阻止表单提交的默认行为
 
+                const username = usernameInput.value.trim();
                 const messageText = messageInput.value.trim();
-                if (messageText === '') {
-                    alert('留言不能为空');
+                if (username === '' || messageText === '') {
+                    alert('姓名和留言不能为空');
                     return;
                 }
 
                 // 创建一个新的留言元素
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('message');
-                messageElement.textContent = messageText;
+                messageElement.innerHTML = `<div class="message-header">${username}</div><div class="message-content">${messageText}</div><button class="delete-btn">删除</button>`;
 
                 // 将新的留言元素添加到留言容器中
                 messagesContainer.appendChild(messageElement);
 
+                // 添加淡入效果
+                setTimeout(() => {
+                    messageElement.classList.add('show');
+                }, 10);
+
                 // 清空文本框
+                usernameInput.value = '';
                 messageInput.value = '';
+
+                // 添加删除按钮事件
+                messageElement.querySelector('.delete-btn').addEventListener('click', function() {
+                    messagesContainer.removeChild(messageElement);
+                });
             });
         });
     </script>
