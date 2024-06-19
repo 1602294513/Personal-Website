@@ -47,9 +47,10 @@ document.addEventListener('DOMContentLoaded', function(){
     updateTime();
     //每秒更新
     setInterval(updateTime, 1000);
+    
     //一言
     function fetchHitokoto() {
-        fetch('https://v1.hitokoto.cn?max_length=24')
+        fetch('https://v1.hitokoto.cn')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('hitokoto_text').innerHTML = data.hitokoto;
@@ -57,9 +58,9 @@ document.addEventListener('DOMContentLoaded', function(){
             })
             .catch(console.error);
     }
-
-    fetchHitokoto(); // Initial fetch when the page loads
-
+    //初始立即调用一言
+    fetchHitokoto(); 
+    //点击事件
     let times = 0;
     document.getElementById('hitokoto').addEventListener('click', function() {
         if (times === 0) {
@@ -72,11 +73,10 @@ document.addEventListener('DOMContentLoaded', function(){
             }, 1000);
             fetchHitokoto();
         } else {
-            iziToast.show({
-                timeout: 1000,
-                icon: "fa-solid fa-circle-exclamation",
-                message: '你点太快了吧'
-            });
+            document.querySelector('.iziToast-wrapper-topCenter').style.display = 'block';
+            setTimeout(function() {
+                document.querySelector('.iziToast-wrapper-topCenter').style.display = 'none';
+            },1000);
         }
     });
 });

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,8 +11,9 @@
     <link rel="stylesheet" href="./css/load.css">
     <script src="./js/index.js"></script>
     <script src="./js/load.js"></script>
-</head>
+    <script src="https://cdn.jsdelivr.net/npm/iziToast@1.3.0/dist/iziToast.min.js"></script>
 
+</head>
 <body>
     <!--加载动画 start-->
     <div id="loading-box">
@@ -31,8 +31,12 @@
             </div>
         </div>
     </div>
-    
     <!--加载动画 end-->
+    
+    <div class="iziToast-wrapper ">
+        <div class="iziToast-wrapper-topCenter">你点的太快了!</div>
+    </div>
+
     <!-- 切换主题 -->
     <header>
         <input type="checkbox" id="theme-toggle">
@@ -49,16 +53,21 @@
             </form>
             <div id="message-board"></div>
         </section> -->
-        <section class="welcome" id="hitokoto">
-            <div class="Hello" id="hitokoto_text">同学们好</div>
+        <section class="welcome">
+            <div id="hitokoto">
+                <div class="Hello" id="hitokoto_text">同学们好</div>
+                <div class="hitokoto-from">-「&nbsp;<span id="from_text"></span>&nbsp;」</div>
+            </div>
             <!-- <a href="#" id="hitokoto_text" >:D 获取中...</a> -->
+            
         </section>
         <section class="profile">
             <h1>个人资料<br>Personal Profile</h1>
-            <img src="./img/index/icon/logo.png" alt="Profile Picture" class="profile-pic">
+            <img src="./img/index/icon/logo.png" onclick="window.location.href='./travel.html'" alt="Profile Picture" class="profile-pic">
             <p>AckerLi</p>
             <p>出生：四川</p>
             <p>故居：西安</p>
+            <p><a href="message.html" class="contact">给我留言</a></p>
         </section>
         <section class="time">
             <!-- <h1>时间<br>Time</h1> -->
@@ -68,9 +77,9 @@
         <section class="projects">
             <h1>小项目<br>Mini Projects</h1>
             <div class="project-list">
-                <a href="./projects/ABC.html" target="_blank">联想词</a>
                 <a href="./projects/clickHere.html" target="_blank">小游戏1</a>
                 <a href="./projects/clickHere2.html" target="_blank">小游戏2</a>
+                <a href="./projects/ABC.html" target="_blank">联想词</a>
                 <a href="./projects/colorful.html" target="_blank">随机颜色</a>
                 <a href="./projects/cps.html" target="_blank">CPS测试</a>
                 <a href="./projects/rotation.html" target="_blank">旋转图形</a>
@@ -93,7 +102,7 @@
             <a href="https://github.com/1602294513" class="github" target="_blank">
                 <i class="fa-brands fa-github"></i>
             </a>
-            <a href="message.html" class="message">给我留言</a>
+            <a href="contact.html" class="message" style="float: right;">联系我</a>
         </section>
     </main>
 
@@ -101,16 +110,6 @@
         <p>&copy; 2024 Jack. All rights reserved.</p>
         <a class="banquan" href="http://beian.miit.gov.cn/" target="_blank">蜀ICP备2022028857号</a>
     </footer>
-    <script>
-        fetch('https://v1.hitokoto.cn')
-            .then(response => response.json())
-            .then(data => {
-                const hitokoto = document.querySelector('#hitokoto_text')
-                hitokoto.href = `https://hitokoto.cn/?uuid=${data.uuid}`
-                hitokoto.innerText = data.hitokoto
-            })
-            .catch(console.error)
-    </script>
     
 </body>
 
