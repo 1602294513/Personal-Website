@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>数字小球判断游戏</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            /* display: flex; */
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        #game-container {
+            width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #screen {
+            width: 500px;
+            height: 300px;
+            border: 4px solid #333;
+            margin-bottom: 20px;
+            position: relative;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+        .ball {
+            width: 50px;
+            height: 50px;
+            background-color: #3498db;
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #keyboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .key {
+            width: 80px;
+            height: 80px;
+            font-size: 24px;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .key:hover {
+            background-color: #d0d0d0;
+        }
+
+        .correct-screen {
+            border-color: #2ecc71 !important;
+        }
+
+        .incorrect-screen {
+            border-color: #e74c3c !important;
+        }
+
+        #info {
+            margin-bottom: 20px;
+            font-size: 18px;
+            text-align: center;
+
+        }
+
+        #info:hover::after {
+            color: #888;
+            font-size: 0.5rem;
+            content: "输入0也能开始哦";
+            position: relative;
+            top: -0.25rem;
+        }
+
+        #result {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #start-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        #start-btn:hover {
+            background-color: #27ae60;
+        }
+
+        #game-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        #screen {
+            width: 100%;
+            max-width: 500px;
+            height: 250px;
+            margin-bottom: 15px;
+        }
+
+        .ball {
+            width: 40px;
+            height: 40px;
+        }
+
+        #keyboard {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .key {
+            width: 100%;
+            height: 60px;
+            font-size: 20px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        #info {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        #result {
+            font-size: 16px;
+        }
+
+        /* 添加媒体查询 */
+        @media screen and (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            #game-container {
+                padding: 10px;
+            }
+
+            #screen {
+                height: 200px;
+            }
+
+            .ball {
+                width: 30px;
+                height: 30px;
+            }
+
+            .key {
+                height: 50px;
+                font-size: 18px;
+            }
+
+            #start-btn {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="game-container">
+        <h1>数字小球判断游戏</h1>
+        <button id="start-btn">开始游戏</button>
+        <div id="info">点击"开始游戏"按钮开始</div>
+        <div id="screen"></div>
+        <div id="keyboard">
+            <button class="key" data-number="7">7</button>
+            <button class="key" data-number="8">8</button>
+            <button class="key" data-number="9">9</button>
+            <button class="key" data-number="4">4</button>
+            <button class="key" data-number="5">5</button>
+            <button class="key" data-number="6">6</button>
+            <button class="key" data-number="1">1</button>
+            <button class="key" data-number="2">2</button>
+            <button class="key" data-number="3">3</button>
+
+        </div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const screen = document.getElementById('screen');
+        const info = document.getElementById('info');
+        const result = document.getElementById('result');
+        const startBtn = document.getElementById('start-btn');
+        const keys = document.querySelectorAll('.key');
+
+        let currentRound = 0;
+        const totalRounds = 10;
+        let correctCount = 0;
+        let startTime;
+        let endTime;
+        let currentBallCount = 0;
+
+        // 开始游戏
+        startBtn.addEventListener('click', startGame);
+        document.addEventListener('keydown', function (e) {
+            if (e.key == 0) {
+                startGame();
+            }
+        });
+
+        // 键盘事件
+        document.addEventListener('keydown', function (e) {
+            if (currentRound === 0 || currentRound > totalRounds) return;
+            const key = parseInt(e.key);
+            if (key >= 1 && key <= 9) {
+                checkAnswer(key);
+            }
+        });
+
+        // 鼠标点击键盘
+        keys.forEach(key => {
+            key.addEventListener('click', function () {
+                if (currentRound === 0 || currentRound > totalRounds) return;
+
+                const number = parseInt(this.getAttribute('data-number'));
+                checkAnswer(number);
+            });
+        });
+
+        function startGame() {
+            currentRound = 1;
+            correctCount = 0;
+            startTime = new Date();
+            result.textContent = '';
+            screen.className = ''; // 清除反馈样式
+            generateBalls();
+        }
+
+        function generateBalls() {
+            screen.innerHTML = '';
+            currentBallCount = Math.floor(Math.random() * 9) + 1;
+
+            const screenWidth = screen.clientWidth;
+            const screenHeight = screen.clientHeight;
+            const ballSize = 50;
+            const balls = [];
+
+            // 生成不重叠的小球
+            for (let i = 0; i < currentBallCount; i++) {
+                const ball = document.createElement('div');
+                ball.className = 'ball';
+
+                let attempts = 0;
+                let positionFound = false;
+
+                // 尝试最多100次找到一个不重叠的位置
+                while (!positionFound && attempts < 100) {
+                    attempts++;
+
+                    // 随机位置，确保球完全在屏幕内
+                    const maxX = screenWidth - ballSize;
+                    const maxY = screenHeight - ballSize;
+                    const randomX = Math.floor(Math.random() * maxX);
+                    const randomY = Math.floor(Math.random() * maxY);
+
+                    // 检查是否与现有球重叠
+                    let overlap = false;
+                    for (const existingBall of balls) {
+                        const dx = existingBall.x - randomX;
+                        const dy = existingBall.y - randomY;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < ballSize * 1.2) { // 1.2倍直径作为安全距离
+                            overlap = true;
+                            break;
+                        }
+                    }
+
+                    if (!overlap) {
+                        ball.style.left = `${randomX}px`;
+                        ball.style.top = `${randomY}px`;
+                        screen.appendChild(ball);
+
+                        // 记录球的位置
+                        balls.push({
+                            x: randomX,
+                            y: randomY
+                        });
+
+                        positionFound = true;
+                    }
+                }
+
+                // 如果100次尝试后仍找不到位置，强制放置
+                if (!positionFound) {
+                    const randomX = Math.floor(Math.random() * (screenWidth - ballSize));
+                    const randomY = Math.floor(Math.random() * (screenHeight - ballSize));
+                    ball.style.left = `${randomX}px`;
+                    ball.style.top = `${randomY}px`;
+                    screen.appendChild(ball);
+                }
+            }
+
+            info.textContent = `第 ${currentRound} 轮/共 ${totalRounds} 轮 - 请选择小球数量`;
+        }
+
+        function checkAnswer(answer) {
+            // 清除之前的反馈
+            screen.classList.remove('correct-screen', 'incorrect-screen');
+
+            if (answer === currentBallCount) {
+                correctCount++;
+                screen.classList.add('correct-screen');
+            } else {
+                screen.classList.add('incorrect-screen');
+            }
+            // 添加键盘输入反馈
+            const keyElement = document.querySelector(`.key[data-number="${answer}"]`);
+            if (keyElement) {
+                keyElement.style.backgroundColor = answer === currentBallCount ? '#2ecc71' : '#e74c3c';
+                setTimeout(() => {
+                    keyElement.style.backgroundColor = '#e0e0e0';
+                }, 200); // 0.2秒后恢复
+            }
+            currentRound++;
+            if (currentRound <= totalRounds) {
+                generateBalls();
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            endTime = new Date();
+            const timeSpent = (endTime - startTime) / 1000; // 秒
+
+            // 计算得分 (正确率 * 时间系数)
+            const accuracy = correctCount / totalRounds;
+            // 时间系数 - 基准是30秒 (30秒得1分，每少0.1秒加0.02，每多0.1秒减0.02)
+            const timeDifference = (30 - timeSpent) * 10; // 转换为0.1秒单位
+            const timeFactor = 1 + (timeDifference * 0.02);
+            // 确保时间系数不小于0.5
+            const adjustedTimeFactor = Math.max(0.5, timeFactor);
+
+            const score = Math.round(accuracy * 100 * adjustedTimeFactor);
+
+            result.innerHTML = `
+                <p>游戏结束!</p>
+                <p>正确次数: ${correctCount}/${totalRounds}</p>
+                <p>用时: ${timeSpent.toFixed(2)} 秒</p>
+                <p>最终得分: ${score}</p>
+            `;
+
+            currentRound = 0;
+            info.textContent = '点击"开始游戏"按钮重新开始';
+        }
+    </script>
+</body>
+
+</html>

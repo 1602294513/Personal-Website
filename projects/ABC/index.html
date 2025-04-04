@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>ABC</title>
+		
 	</head>
 	<body style="font-size: 24px;font-family:consolas;">
 		AA AB AC AD AE AF AG AH AI AJ AK AL AM AN AO AP AQ AR AS AT AW AX AY AZ<br>
@@ -36,9 +37,13 @@
 	    <script>
 	        function change(){
 	            document.querySelector('#text').innerHTML = document.querySelector('#value').value
+				if(document.querySelector('#value').value.length == 0){
+					document.querySelector('#text').innerHTML = "在上方输入缩写划取查看解释"
+				}
 	        }
+
 	    </script>
-		<script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
+		<script src="vue.min.js"></script>
 		<script src="https://lab.magiconch.com/nbnhhsh/nbnhhsh.user.js"></script>
 	</body>
 </html>

@@ -1,19 +1,27 @@
 document.addEventListener('DOMContentLoaded', function(){
-    //主题切换
     const themeToggle = document.getElementById('theme-toggle');
     const root = document.documentElement;
+    const theme = themeToggle.checked ? 'dark' : 'light';
+    //默认主题
+    root.classList.add(theme);
     //切换事件
     themeToggle.onclick = function (){
+
         if (themeToggle.checked) {
             root.classList.remove('light');
             root.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
         } else {
             root.classList.remove('dark');
             root.classList.add('light');
+            localStorage.setItem('theme', 'light');
         }
     }
-    //默认主题
-    root.classList.add('light');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        root.classList.add(savedTheme);
+        themeToggle.checked = savedTheme === 'dark';
+    }
 
     //显示当前日期 星期 时间
     function updateTime() {
