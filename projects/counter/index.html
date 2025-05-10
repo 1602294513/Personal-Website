@@ -214,177 +214,25 @@
 
         </div>
         <div id="result"></div>
+        <div id="leaderboard" style="width: 100%; margin-top: 20px;">
+            <h2 style="text-align: center; margin-bottom: 10px;">实时排行榜</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background-color: #f2f2f2;">
+                        <th style="padding: 8px; text-align: center; border: 1px solid #ddd;">排名</th>
+                        <th style="padding: 8px; text-align: center; border: 1px solid #ddd;">玩家</th>
+                        <th style="padding: 8px; text-align: center; border: 1px solid #ddd;">分数</th>
+                        <th style="padding: 8px; text-align: center; border: 1px solid #ddd;">用时</th>
+                        <th style="padding: 8px; text-align: center; border: 1px solid #ddd;">日期</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    <!-- 排行榜数据将在这里动态生成 -->
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <script>
-        const screen = document.getElementById('screen');
-        const info = document.getElementById('info');
-        const result = document.getElementById('result');
-        const startBtn = document.getElementById('start-btn');
-        const keys = document.querySelectorAll('.key');
-
-        let currentRound = 0;
-        const totalRounds = 10;
-        let correctCount = 0;
-        let startTime;
-        let endTime;
-        let currentBallCount = 0;
-
-        // 开始游戏
-        startBtn.addEventListener('click', startGame);
-        document.addEventListener('keydown', function (e) {
-            if (e.key == 0) {
-                startGame();
-            }
-        });
-
-        // 键盘事件
-        document.addEventListener('keydown', function (e) {
-            if (currentRound === 0 || currentRound > totalRounds) return;
-            const key = parseInt(e.key);
-            if (key >= 1 && key <= 9) {
-                checkAnswer(key);
-            }
-        });
-
-        // 鼠标点击键盘
-        keys.forEach(key => {
-            key.addEventListener('click', function () {
-                if (currentRound === 0 || currentRound > totalRounds) return;
-
-                const number = parseInt(this.getAttribute('data-number'));
-                checkAnswer(number);
-            });
-        });
-
-        function startGame() {
-            currentRound = 1;
-            correctCount = 0;
-            startTime = new Date();
-            result.textContent = '';
-            screen.className = ''; // 清除反馈样式
-            generateBalls();
-        }
-
-        function generateBalls() {
-            screen.innerHTML = '';
-            currentBallCount = Math.floor(Math.random() * 9) + 1;
-
-            const screenWidth = screen.clientWidth;
-            const screenHeight = screen.clientHeight;
-            const ballSize = 50;
-            const balls = [];
-
-            // 生成不重叠的小球
-            for (let i = 0; i < currentBallCount; i++) {
-                const ball = document.createElement('div');
-                ball.className = 'ball';
-
-                let attempts = 0;
-                let positionFound = false;
-
-                // 尝试最多100次找到一个不重叠的位置
-                while (!positionFound && attempts < 100) {
-                    attempts++;
-
-                    // 随机位置，确保球完全在屏幕内
-                    const maxX = screenWidth - ballSize;
-                    const maxY = screenHeight - ballSize;
-                    const randomX = Math.floor(Math.random() * maxX);
-                    const randomY = Math.floor(Math.random() * maxY);
-
-                    // 检查是否与现有球重叠
-                    let overlap = false;
-                    for (const existingBall of balls) {
-                        const dx = existingBall.x - randomX;
-                        const dy = existingBall.y - randomY;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-
-                        if (distance < ballSize * 1.2) { // 1.2倍直径作为安全距离
-                            overlap = true;
-                            break;
-                        }
-                    }
-
-                    if (!overlap) {
-                        ball.style.left = `${randomX}px`;
-                        ball.style.top = `${randomY}px`;
-                        screen.appendChild(ball);
-
-                        // 记录球的位置
-                        balls.push({
-                            x: randomX,
-                            y: randomY
-                        });
-
-                        positionFound = true;
-                    }
-                }
-
-                // 如果100次尝试后仍找不到位置，强制放置
-                if (!positionFound) {
-                    const randomX = Math.floor(Math.random() * (screenWidth - ballSize));
-                    const randomY = Math.floor(Math.random() * (screenHeight - ballSize));
-                    ball.style.left = `${randomX}px`;
-                    ball.style.top = `${randomY}px`;
-                    screen.appendChild(ball);
-                }
-            }
-
-            info.textContent = `第 ${currentRound} 轮/共 ${totalRounds} 轮 - 请选择小球数量`;
-        }
-
-        function checkAnswer(answer) {
-            // 清除之前的反馈
-            screen.classList.remove('correct-screen', 'incorrect-screen');
-
-            if (answer === currentBallCount) {
-                correctCount++;
-                screen.classList.add('correct-screen');
-            } else {
-                screen.classList.add('incorrect-screen');
-            }
-            // 添加键盘输入反馈
-            const keyElement = document.querySelector(`.key[data-number="${answer}"]`);
-            if (keyElement) {
-                keyElement.style.backgroundColor = answer === currentBallCount ? '#2ecc71' : '#e74c3c';
-                setTimeout(() => {
-                    keyElement.style.backgroundColor = '#e0e0e0';
-                }, 200); // 0.2秒后恢复
-            }
-            currentRound++;
-            if (currentRound <= totalRounds) {
-                generateBalls();
-            } else {
-                endGame();
-            }
-        }
-
-        function endGame() {
-            endTime = new Date();
-            const timeSpent = (endTime - startTime) / 1000; // 秒
-
-            // 计算得分 (正确率 * 时间系数)
-            const accuracy = correctCount / totalRounds;
-            // 时间系数 - 基准是30秒 (30秒得1分，每少0.1秒加0.02，每多0.1秒减0.02)
-            const timeDifference = (30 - timeSpent) * 10; // 转换为0.1秒单位
-            const timeFactor = 1 + (timeDifference * 0.02);
-            // 确保时间系数不小于0.5
-            const adjustedTimeFactor = Math.max(0.5, timeFactor);
-
-            const score = Math.round(accuracy * 100 * adjustedTimeFactor);
-
-            result.innerHTML = `
-                <p>游戏结束!</p>
-                <p>正确次数: ${correctCount}/${totalRounds}</p>
-                <p>用时: ${timeSpent.toFixed(2)} 秒</p>
-                <p>最终得分: ${score}</p>
-            `;
-
-            currentRound = 0;
-            info.textContent = '点击"开始游戏"按钮重新开始';
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>
